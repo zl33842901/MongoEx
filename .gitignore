@@ -3,3 +3,15 @@
 ################################################################################
 
 /.vs/xLiAd.MongoEx/v16
+/xLiAd.MongoEx.Entities/bin
+/xLiAd.MongoEx.Entities/nupkgs
+/xLiAd.MongoEx.Entities/nupkgsSymb
+/xLiAd.MongoEx.Entities/obj
+/xLiAd.MongoEx.Entities/发布到NUGET.bat
+/xLiAd.MongoEx.Repository/bin
+/xLiAd.MongoEx.Repository/nupkgs
+/xLiAd.MongoEx.Repository/nupkgsSymb
+/xLiAd.MongoEx.Repository/obj
+/xLiAd.MongoEx.Repository/发布到NUGET.bat
+/xLiAd.MongoEx.RepositoryTest/bin/Debug/netcoreapp3.0
+/xLiAd.MongoEx.RepositoryTest/obj
