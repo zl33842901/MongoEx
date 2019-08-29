@@ -15,3 +15,4 @@
 /xLiAd.MongoEx.Repository/发布到NUGET.bat
 /xLiAd.MongoEx.RepositoryTest/bin/Debug/netcoreapp3.0
 /xLiAd.MongoEx.RepositoryTest/obj
+/.vs/xLiAd.MongoEx/DesignTimeBuild

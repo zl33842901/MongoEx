@@ -550,7 +550,7 @@ namespace xLiAd.MongoEx.Repository
             {
                 model = MongoQueryable.Where<T>(model, where);
             }
-            model = MongoQueryable.Take<T>(MongoQueryable.Skip<T>(MongoQueryable.OrderBy<T, TKey>(model, orderBy), (pageIndex - 1) * pageSize), pageSize);
+            model = MongoQueryable.Take<T>(MongoQueryable.Skip<T>(isOrderByAsc ? MongoQueryable.OrderBy<T, TKey>(model, orderBy) : MongoQueryable.OrderByDescending<T, TKey>(model, orderBy), (pageIndex - 1) * pageSize), pageSize);
             return new StaticPagedList<T>(model.ToList<T>(), pageIndex, pageSize, (int)count);
         }
 
