@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xLiAd.MongoEx.Repository", "xLiAd.MongoEx.Repository\xLiAd.MongoEx.Repository.csproj", "{634B9E0E-5522-488C-BE2E-72DAB9587CFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xLiAd.MongoEx.Repository", "xLiAd.MongoEx.Repository\xLiAd.MongoEx.Repository.csproj", "{634B9E0E-5522-488C-BE2E-72DAB9587CFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xLiAd.MongoEx.Entities", "xLiAd.MongoEx.Entities\xLiAd.MongoEx.Entities.csproj", "{CA0832F3-EE86-4FF5-A1A0-70F545B1FA7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xLiAd.MongoEx.Entities", "xLiAd.MongoEx.Entities\xLiAd.MongoEx.Entities.csproj", "{CA0832F3-EE86-4FF5-A1A0-70F545B1FA7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xLiAd.MongoEx.RepositoryTest", "xLiAd.MongoEx.RepositoryTest\xLiAd.MongoEx.RepositoryTest.csproj", "{F15B1B45-A4FC-4256-B7B8-BF2726BB32E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xLiAd.MongoEx.RepositoryTest", "xLiAd.MongoEx.RepositoryTest\xLiAd.MongoEx.RepositoryTest.csproj", "{F15B1B45-A4FC-4256-B7B8-BF2726BB32E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xLiAd.MongoEx.VersionRepository", "xLiAd.MongoEx.VersionRepository\xLiAd.MongoEx.VersionRepository.csproj", "{C0E94C4C-50AB-4D63-85C0-60FB87E46637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xLiAd.MongoEx.VersionRepositoryTest", "xLiAd.MongoEx.VersionRepositoryTest\xLiAd.MongoEx.VersionRepositoryTest.csproj", "{16C2CC50-31A9-4FC6-A1AB-E596AB582419}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{F15B1B45-A4FC-4256-B7B8-BF2726BB32E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F15B1B45-A4FC-4256-B7B8-BF2726BB32E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F15B1B45-A4FC-4256-B7B8-BF2726BB32E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E94C4C-50AB-4D63-85C0-60FB87E46637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E94C4C-50AB-4D63-85C0-60FB87E46637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E94C4C-50AB-4D63-85C0-60FB87E46637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E94C4C-50AB-4D63-85C0-60FB87E46637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16C2CC50-31A9-4FC6-A1AB-E596AB582419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16C2CC50-31A9-4FC6-A1AB-E596AB582419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16C2CC50-31A9-4FC6-A1AB-E596AB582419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16C2CC50-31A9-4FC6-A1AB-E596AB582419}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
