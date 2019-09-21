@@ -18,3 +18,5 @@
 /.vs/xLiAd.MongoEx/DesignTimeBuild
 /xLiAd.MongoEx.VersionRepository/obj
 /xLiAd.MongoEx.VersionRepositoryTest/obj
+/xLiAd.MongoEx.VersionRepository/bin/Debug/netstandard2.0
+/xLiAd.MongoEx.VersionRepositoryTest/bin/Debug/netcoreapp3.0
