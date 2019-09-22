@@ -50,7 +50,7 @@ namespace xLiAd.MongoEx.VersionRepository
                 else
                 {
                     var type = GetNonNullableType(property.PropertyType);
-                    equalsMethod = type.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
+                    equalsMethod = type.GetMethod("Equals", new Type[] { type, type });
                     if (equalsMethod != null)
                         return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
                     else
