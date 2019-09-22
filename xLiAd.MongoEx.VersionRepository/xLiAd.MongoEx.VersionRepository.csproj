@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>张磊</Authors>
+    <Company>张磊 xLiAd</Company>
+    <Description>mongodb 数据自动版本化仓储</Description>
+    <Copyright>Copyright © zhanglei 2019</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
