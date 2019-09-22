@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace xLiAd.MongoEx.VersionRepository
@@ -16,8 +17,7 @@ namespace xLiAd.MongoEx.VersionRepository
             {
                 var newValue = property.GetValue(modelNew);
                 var oldValue = property.GetValue(modelOld);
-                var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
-                bool ifeq = (bool)equalsMethod.Invoke(null, new object[] { newValue, oldValue });
+                bool ifeq = Equals(newValue, oldValue);
                 if (!ifeq)
                     result.Add(new FieldChangeRecordDto()
                     {
@@ -30,6 +30,44 @@ namespace xLiAd.MongoEx.VersionRepository
                     });
             }
             return result;
+        }
+
+        private static bool Equals(PropertyInfo property, object t1, object t2)
+        {
+            var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
+            if(equalsMethod != null)
+                return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
+            if(IsNullableType(property.PropertyType))
+            {
+                if (t1 == null && t2 == null)
+                    return true;
+                else if (t1 == null || t2 == null)
+                    return false;
+                else
+                {
+                    var type = GetNonNullableType(property.PropertyType);
+                    equalsMethod = type.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
+                    if (equalsMethod != null)
+                        return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
+                    else
+                        throw new Exception("Can't Find Compare Method.");
+                }
+            }
+            throw new Exception("Can't Find Compare Method.");
+        }
+
+        private static bool IsNullableType(Type type)
+        {
+            return type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
+        private static Type GetNonNullableType(Type type)
+        {
+            if (IsNullableType(type))
+            {
+                return type.GetGenericArguments()[0];
+            }
+            return type;
         }
     }
 }

@@ -12,5 +12,6 @@ namespace xLiAd.MongoEx.VersionRepositoryTest
         public string EmployeeCode { get; set; }
         public string CName { get; set; }
         public string Mail { get; set; }
+        public DateTime? BirthDay { get; set; }
     }
 }
