@@ -17,7 +17,7 @@ namespace xLiAd.MongoEx.VersionRepository
             {
                 var newValue = property.GetValue(modelNew);
                 var oldValue = property.GetValue(modelOld);
-                bool ifeq = Equals(newValue, oldValue);
+                bool ifeq = IfEquals(property, newValue, oldValue);
                 if (!ifeq)
                     result.Add(new FieldChangeRecordDto()
                     {
@@ -32,12 +32,12 @@ namespace xLiAd.MongoEx.VersionRepository
             return result;
         }
 
-        private static bool Equals(PropertyInfo property, object t1, object t2)
+        private static bool IfEquals(PropertyInfo property, object t1, object t2)
         {
-            if(property.PropertyType == typeof(DateTime))
-            {
-                return ((DateTime)t1).ToLongTimeString() == ((DateTime)t2).ToLongTimeString();
-            }
+            //if(property.PropertyType == typeof(DateTime))
+            //{
+            //    return ((DateTime)t1).ToLongTimeString() == ((DateTime)t2).ToLongTimeString();
+            //}
             var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
             if(equalsMethod != null)
                 return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
