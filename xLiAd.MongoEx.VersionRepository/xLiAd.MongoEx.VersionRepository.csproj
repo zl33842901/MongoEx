@@ -6,7 +6,7 @@
     <Company>张磊 xLiAd</Company>
     <Description>mongodb 数据自动版本化仓储</Description>
     <Copyright>Copyright © zhanglei 2019</Copyright>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>

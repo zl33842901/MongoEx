@@ -41,7 +41,10 @@ namespace xLiAd.MongoEx.VersionRepository
             var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
             if(equalsMethod != null)
                 return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
-            if(IsNullableType(property.PropertyType))
+            equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { typeof(object), typeof(object) });
+            if (equalsMethod != null)
+                return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
+            if (IsNullableType(property.PropertyType))
             {
                 if (t1 == null && t2 == null)
                     return true;
