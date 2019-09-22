@@ -34,6 +34,10 @@ namespace xLiAd.MongoEx.VersionRepository
 
         private static bool Equals(PropertyInfo property, object t1, object t2)
         {
+            if(property.PropertyType == typeof(DateTime))
+            {
+                return ((DateTime)t1).ToLongTimeString() == ((DateTime)t2).ToLongTimeString();
+            }
             var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
             if(equalsMethod != null)
                 return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
