@@ -13,5 +13,6 @@ namespace xLiAd.MongoEx.VersionRepositoryTest
         public string CName { get; set; }
         public string Mail { get; set; }
         public DateTime? BirthDay { get; set; }
+        public int Class { get; set; }
     }
 }

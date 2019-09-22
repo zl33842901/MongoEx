@@ -34,11 +34,14 @@ namespace xLiAd.MongoEx.VersionRepository
 
         private static bool IfEquals(PropertyInfo property, object t1, object t2)
         {
-            if (property.PropertyType == typeof(bool))
-            {
-                return ((bool)t1) == ((bool)t2);
-            }
-            var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
+            //if (property.PropertyType == typeof(bool))
+            //{
+            //    return ((bool)t1) == ((bool)t2);
+            //}
+            var equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType });
+            if (equalsMethod != null)
+                return (bool)equalsMethod.Invoke(t1, new object[] { t2 });
+            equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { property.PropertyType, property.PropertyType });
             if(equalsMethod != null)
                 return (bool)equalsMethod.Invoke(null, new object[] { t1, t2 });
             equalsMethod = property.PropertyType.GetMethod("Equals", new Type[] { typeof(object), typeof(object) });
