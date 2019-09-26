@@ -7,7 +7,7 @@ using xLiAd.MongoEx.Repository;
 
 namespace xLiAd.MongoEx.VersionRepository
 {
-    public class VersionMongoRepository<T> where T : IVersionEntityModel
+    public class VersionMongoRepository<T> where T : class,IVersionEntityModel
     {
         protected string CollectionName { get; private set; }
         protected IConnect Connect { get; private set; }

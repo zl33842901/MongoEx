@@ -15,4 +15,19 @@ namespace xLiAd.MongoEx.VersionRepositoryTest
         public DateTime? BirthDay { get; set; }
         public int Class { get; set; }
     }
+
+    public class CompareTestModel : VersionEntityModel
+    {
+        public int propertyInt { get; set; }
+        public int? propertyNullableInt { get; set; }
+        public string propertyString { get; set; }
+        public float propertyFloat { get; set; }
+        public float? propertyNullableFloat { get; set; }
+        public DateTime propertyDateTime { get; set; }
+        public DateTime? propertyNullableDateTime { get; set; }
+        public bool propertyBool { get; set; }
+        public bool? propertyNullableBool { get; set; }
+        public object propertyObject { get; set; }
+        public UserModel propertyClass { get; set; }
+    }
 }
