@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using xLiAd.MongoEx.VersionRepository;
 using Xunit;
 
 namespace xLiAd.MongoEx.VersionRepositoryTest
 {
     public class ModelCompareTest
     {
-        [Fact]
-        public void Test1()
+        private (CompareTestModel, CompareTestModel) GetSameModel()
         {
             var model = new CompareTestModel()
             {
@@ -38,11 +38,10 @@ namespace xLiAd.MongoEx.VersionRepositoryTest
                 propertyObject = new object(),
                 propertyString = "a"
             };
-            var result = xLiAd.MongoEx.VersionRepository.ModelCompareHelper.Compare(model, model2, new string[] { "ChangeRecords", "CreatedOn", "Id", "ModifiedOn", "ObjectId" });
-            Assert.Empty(result);
+            return (model, model2);
         }
-        [Fact]
-        public void Test2()
+
+        private (CompareTestModel, CompareTestModel) GetDiffModel()
         {
             var model = new CompareTestModel()
             {
@@ -72,7 +71,28 @@ namespace xLiAd.MongoEx.VersionRepositoryTest
                 propertyObject = null,
                 propertyString = "b"
             };
+            return (model, model2);
+        }
+        [Fact]
+        public void Test1()
+        {
+            (var model, var model2) = GetSameModel();
             var result = xLiAd.MongoEx.VersionRepository.ModelCompareHelper.Compare(model, model2, new string[] { "ChangeRecords", "CreatedOn", "Id", "ModifiedOn", "ObjectId" });
+            Assert.Empty(result);
+        }
+        [Fact]
+        public void Test2()
+        {
+            var (model, model2) = GetDiffModel();
+            var result = xLiAd.MongoEx.VersionRepository.ModelCompareHelper.Compare(model, model2, new string[] { "ChangeRecords", "CreatedOn", "Id", "ModifiedOn", "ObjectId" });
+            Assert.Equal(11, result.Count);
+        }
+
+        [Fact]
+        public void Test3()
+        {
+            var (model, model2) = GetDiffModel();
+            var result = xLiAd.MongoEx.VersionRepository.ModelCompareHelper.Compare(model, model2, typeof(IVersionEntityModel));
             Assert.Equal(11, result.Count);
         }
     }

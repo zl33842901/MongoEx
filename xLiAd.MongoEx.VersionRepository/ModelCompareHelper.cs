@@ -8,13 +8,29 @@ namespace xLiAd.MongoEx.VersionRepository
 {
     public static class ModelCompareHelper
     {
-        public static List<FieldChangeRecordDto> Compare<T>(T modelNew, T modelOld, DateTime changeTime) where T : class,IVersionEntityModel
+        public static List<FieldChangeRecordDto> Compare<T>(T modelNew, T modelOld, DateTime changeTime, string[] IgnoreProperties = null)
         {
-            var result = Compare(modelNew, modelOld);
+            var result = Compare(modelNew, modelOld, IgnoreProperties);
             result.ForEach(x => x.RecordTime = changeTime);
             return result;
         }
-        public static List<FieldChangeRecordDto> Compare<T>(T modelNew, T modelOld, string[] IgnoreProperties = null) where T : class
+
+        public static List<FieldChangeRecordDto> Compare<T>(T modelNew, T modelOld, DateTime changeTime, Type IgnoreDeclareBy)
+        {
+            var result = Compare(modelNew, modelOld, IgnoreDeclareBy);
+            result.ForEach(x => x.RecordTime = changeTime);
+            return result;
+        }
+
+        public static List<FieldChangeRecordDto> Compare<T>(T modelNew, T modelOld, Type IgnoreDeclareBy)
+        {
+            var properties = IgnoreDeclareBy.GetProperties();
+            var propertyNames = properties.Select(x => x.Name).ToArray();
+            var result = Compare(modelNew, modelOld, propertyNames);
+            return result;
+        }
+
+        public static List<FieldChangeRecordDto> Compare<T>(T modelNew, T modelOld, string[] IgnoreProperties = null)
         {
             List<FieldChangeRecordDto> result = new List<FieldChangeRecordDto>();
             if (modelNew == null || modelOld == null)

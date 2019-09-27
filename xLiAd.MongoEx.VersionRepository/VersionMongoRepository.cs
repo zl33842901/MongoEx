@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -32,19 +33,47 @@ namespace xLiAd.MongoEx.VersionRepository
         }
         public VersionMongoRepository(string connectionString, string databaseName, string collectionName = null, ISnapshotFreqPolicy snapshotFreqPolicy = null) : this(new Connect(connectionString, databaseName), collectionName, snapshotFreqPolicy) { }
         public VersionMongoRepository(MongoUrl url, string collectionName = null, ISnapshotFreqPolicy snapshotFreqPolicy = null) : this(new Connect(url), collectionName, snapshotFreqPolicy) { }
-
+        /// <summary>
+        /// 获取某个时间的快照表
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         private IMongoCollection<T> GetSnapCollection(DateTime time)
         {
             var snapCollectionName = SnapshotFreqPolicy.GetSnapshotCollectionName(CollectionName, time);
             var snapCollection = this.Connect.Collection<T>(snapCollectionName);
             return snapCollection;
         }
+        /// <summary>
+        /// 获取某个时间以来，有效（有数据）的所有表
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="firstValid">第一个（time对应的）强制有效</param>
+        /// <returns></returns>
+        private IEnumerable<IMongoCollection<T>> GetValidSnapCollectionAfter(DateTime time, bool firstValid = true)
+        {
+            var snapCollectionNames = SnapshotFreqPolicy.GetSnapshotCollectionNamesUntilNow(CollectionName, time);
+            var i = 0;
+            foreach(var snapCollectionName in snapCollectionNames)
+            {
+                var snapCollection = this.Connect.Collection<T>(snapCollectionName);
+                if(snapCollection.CountDocuments(x => true) > 0 || (i == 0 && firstValid))
+                    yield return snapCollection;
+                i++;
+            }
+        }
+        //private IMongoCollection<T> GetNowSnapCollection()
+        //{
+        //    return GetSnapCollection(DateTime.Now);
+        //}
         public void Add(T model, DateTime? modelTime = null)
         {
             DateTime time = modelTime ?? DateTime.Now;
             LastestCollection.InsertOne(model, null, new CancellationToken());
-            var snapCollection = GetSnapCollection(time);
-            snapCollection.InsertOne(model, null, new CancellationToken());
+            foreach(var snapCollection in GetValidSnapCollectionAfter(time))
+            {
+                snapCollection.InsertOne(model, null, new CancellationToken());
+            }
         }
 
         public void Edit(T model, DateTime? modelTime = null)
@@ -163,7 +192,22 @@ namespace xLiAd.MongoEx.VersionRepository
             {
                 change.Invoke(model);
             }
-            return model;
+            if (model.Deleted && model.DeletedTime <= modelTime.Value)
+                return null;
+            else
+                return model;
+        }
+
+        public long Delete<TKey>(TKey key, DateTime? modelTime = null)
+        {
+            var filter = GetFilterDefinitionOfKey(key);
+            var result = LastestCollection.DeleteOne(filter);
+            if (result.DeletedCount < 1)
+                return 0;
+            DateTime time = modelTime ?? DateTime.Now;
+            var snapCollection = GetSnapCollection(time);
+            var uresult = snapCollection.UpdateOne(filter, Builders<T>.Update.Set(x => x.Deleted, true).Set(x => x.DeletedTime, time));
+            return uresult.ModifiedCount;
         }
     }
 }
