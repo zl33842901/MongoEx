@@ -33,5 +33,22 @@ namespace xLiAd.MongoEx.VersionRepository.SnapshotFreqPolicy
                 yield return $"{lastestCollectionName}_{i.ToString("yyyy_MM")}";
             }
         }
+
+        /// <summary>
+        /// 返回某个时间点向前追count个版本的集合
+        /// </summary>
+        /// <param name="lastestCollectionName"></param>
+        /// <param name="time"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public IEnumerable<ISnapshotCollection> GetVersions(string lastestCollectionName, DateTime documentTime, int count = 240)
+        {
+            var documentMonthFirstDay = new DateTime(documentTime.Year, documentTime.Month, 1);
+            var startMonthFirstDay = documentMonthFirstDay.AddMonths(count);
+            for(var i = documentMonthFirstDay; i >= startMonthFirstDay; i = i.AddMonths(-1))
+            {
+                yield return new MonthSnapshotCollection(lastestCollectionName, i);
+            }
+        }
     }
 }

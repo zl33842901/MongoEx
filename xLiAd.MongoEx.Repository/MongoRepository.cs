@@ -76,6 +76,11 @@ namespace xLiAd.MongoEx.Repository
             this.Collection = this.Connect.Collection<T>(collectionName);
         }
 
+        public MongoRepository(IMongoCollection<T> mongoCollection)
+        {
+            this.Collection = mongoCollection;
+        }
+
         public T Add(T model)
         {
             this.Collection.InsertOne(model, null, new CancellationToken());
@@ -923,12 +928,6 @@ namespace xLiAd.MongoEx.Repository
         public MongoRepository(string connectionString, string databaseName, string collectionName)
             : base(connectionString, databaseName, collectionName) { }
 
-        /// <summary>
-        /// Initializes a new instance of the MongoRepository class.
-        /// </summary>
-        /// <param name="connectionString">Connectionstring to use for connecting to MongoDB.</param>
-        /// <param name="collectionName">The name of the collection to use.</param>
-        //public MongoRepository(string connectionString, string collectionName)
-        //    : base(connectionString, collectionName) { }
+        public MongoRepository(IMongoCollection<T> mongoCollection) : base(mongoCollection) { }
     }
 }
