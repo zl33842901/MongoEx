@@ -119,15 +119,11 @@ namespace xLiAd.MongoEx.VersionRepository
                 var snapResult = snapCollection.UpdateOne(filterDef, update);
             }
 
-            builder = Builders<T>.Update;
+            update = Builders<T>.Update.Set(x => x.ModifiedOn, modelTime);
             foreach (var change in listChange)
             {
-                if (update == null)
-                    update = builder.Set(change.FieldName, change.NewValue);
-                else
-                    update = update.Set(change.FieldName, change.NewValue);
+                update = update.Set(change.FieldName, change.NewValue);
             }
-            update = update.Set(x => x.ModifiedOn, modelTime);
             var result = OriginalCollection.UpdateOne(filterDef, update);
             if (result.ModifiedCount < 1)
                 throw new Exception("Error Happenned when Update Database");
