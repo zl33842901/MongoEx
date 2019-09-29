@@ -17,5 +17,7 @@ namespace xLiAd.MongoEx.VersionRepository
         List<FieldChangeRecord> ChangeRecords { get; set; }
         bool Deleted { get; }
         DateTime? DeletedTime { get; }
+        new DateTime CreatedOn { get; set; }
+        new DateTime ModifiedOn { get; set; }
     }
 }

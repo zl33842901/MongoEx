@@ -76,6 +76,7 @@ namespace xLiAd.MongoEx.VersionRepository
         public void Add(T model, DateTime? modelTime = null)
         {
             DateTime time = modelTime ?? DateTime.Now;
+            model.CreatedOn = time;
             OriginalCollection.InsertOne(model, null, new CancellationToken());
             foreach(var snapCollection in GetValidSnapCollectionAfter(time))
             {
@@ -105,19 +106,8 @@ namespace xLiAd.MongoEx.VersionRepository
             //下面更新主表字段 和 快照表的ChangeRecords
             UpdateDefinitionBuilder<T> builder = Builders<T>.Update;
             UpdateDefinition<T> update = null;
-            foreach(var change in listChange)
-            {
-                if (update == null)
-                    update = builder.Set(change.FieldName, change.NewValue);
-                else
-                    update = update.Set(change.FieldName, change.NewValue);
-            }
-            var result = OriginalCollection.UpdateOne(filterDef, update);
-            if (result.ModifiedCount < 1)
-                throw new Exception("Error Happenned when Update Database");
-            builder = Builders<T>.Update;
-            update = builder.PushEach("ChangeRecords", listChange.Select(x => x.ToRecord()));
 
+            update = builder.PushEach("ChangeRecords", listChange.Select(x => x.ToRecord()));
             foreach (var snapCollection in GetValidSnapCollectionAfter(modelTime))
             {
                 var modelInSnap = snapCollection.Find(filterDef).FirstOrDefault();
@@ -128,6 +118,20 @@ namespace xLiAd.MongoEx.VersionRepository
                 }
                 var snapResult = snapCollection.UpdateOne(filterDef, update);
             }
+
+            builder = Builders<T>.Update;
+            foreach (var change in listChange)
+            {
+                if (update == null)
+                    update = builder.Set(change.FieldName, change.NewValue);
+                else
+                    update = update.Set(change.FieldName, change.NewValue);
+            }
+            update = update.Set(x => x.ModifiedOn, modelTime);
+            var result = OriginalCollection.UpdateOne(filterDef, update);
+            if (result.ModifiedCount < 1)
+                throw new Exception("Error Happenned when Update Database");
+            
             return true;
         }
 
@@ -233,6 +237,8 @@ namespace xLiAd.MongoEx.VersionRepository
                 change.Invoke(model);
             }
             if (model.Deleted && model.DeletedTime <= modelTime.Value)
+                return null;
+            else if (model.CreatedOn > modelTime.Value)
                 return null;
             else
                 return model;
