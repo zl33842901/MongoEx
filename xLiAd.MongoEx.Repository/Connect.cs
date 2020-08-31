@@ -10,7 +10,7 @@ namespace xLiAd.MongoEx.Repository
     {
         private bool disposed;
 
-        protected MongoClient Client
+        protected IMongoClient Client
         {
             get;
             private set;
@@ -62,6 +62,20 @@ namespace xLiAd.MongoEx.Repository
             this.Client = new MongoClient(connectionString);
             this.DataBase = this.Client.GetDatabase(databaseName, databaseSettings);
             this.DatabaseSettings = databaseSettings;
+        }
+
+        public Connect(IMongoClient mongoClient, string databaseName, MongoDatabaseSettings databaseSettings = null)
+        {
+            this.Client = mongoClient;
+            this.DataBase = this.Client.GetDatabase(databaseName, databaseSettings);
+            this.DatabaseSettings = databaseSettings;
+        }
+
+        public Connect(IMongoDatabase mongoDatabase)
+        {
+            this.Client = mongoDatabase.Client;
+            this.DataBase = mongoDatabase;
+            this.DatabaseSettings = mongoDatabase.Settings;
         }
 
         public IMongoCollection<T> Collection<T>(string collectionName)

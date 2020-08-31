@@ -81,6 +81,28 @@ namespace xLiAd.MongoEx.Repository
             this.Collection = mongoCollection;
         }
 
+        public MongoRepository(IMongoClient mongoClient, string databaseName, string collectionName = null)
+        {
+            this.Connect = new Connect(mongoClient, databaseName);
+            if (string.IsNullOrEmpty(collectionName))
+            {
+                CollectionNameAttribute mongoCollectionName = (CollectionNameAttribute)typeof(T).GetTypeInfo().GetCustomAttribute(typeof(CollectionNameAttribute));
+                collectionName = (mongoCollectionName != null ? mongoCollectionName.Name : typeof(T).Name.ToLower());
+            }
+            this.Collection = this.Connect.Collection<T>(collectionName);
+        }
+
+        public MongoRepository(IMongoDatabase mongoDatabase, string collectionName = null)
+        {
+            this.Connect = new Connect(mongoDatabase);
+            if (string.IsNullOrEmpty(collectionName))
+            {
+                CollectionNameAttribute mongoCollectionName = (CollectionNameAttribute)typeof(T).GetTypeInfo().GetCustomAttribute(typeof(CollectionNameAttribute));
+                collectionName = (mongoCollectionName != null ? mongoCollectionName.Name : typeof(T).Name.ToLower());
+            }
+            this.Collection = this.Connect.Collection<T>(collectionName);
+        }
+
         public T Add(T model)
         {
             this.Collection.InsertOne(model, null, new CancellationToken());
